@@ -58,6 +58,7 @@ contract Paytr_Helpers is Test {
     event InterestPayoutEvent(address tokenAddress, address payee, uint256 interestAmount, bytes paymentReference);
     event ContractParametersUpdatedEvent(uint16 feeModifier, uint256 minDueDateParameter, uint256 maxDueDateParameter, uint256 minAmount, uint8 maxPayoutArraySize);
     event SetERC20FeeProxyEvent(address ERC20FeeProxyAddress);
+    event ClaimCompRewardsEvent();
     
     //external contracts events:
     event TransferWithReferenceAndFee(address tokenAddress, address to, uint256 amount, bytes indexed paymentReference, uint256 feeAmount, address feeAddress);

@@ -776,18 +776,16 @@ contract PaytrTest is Test, Paytr_Helpers {
             0
         );
 
-        vm.warp(30 days);
+        vm.warp(block.timestamp + 30 days);
 
-        uint64 accruedRewards = IComet(cometAddress).baseTrackingAccrued(address(Paytr_Test));
-        console2.log("accruedRewards",accruedRewards);
+        vm.expectEmit();
+        emit ClaimCompRewardsEvent();
 
+        vm.prank(owner);
+        Paytr_Test.claimCompRewards();
 
-        // vm.prank(owner);
-        // Paytr_Test.claimCompRewards();
-
-        //COMP balance owner
-        // uint256 compBalanceAfterClaiming = compToken.balanceOf(owner);
-        // console2.log("$COMP balance after claiming",compBalanceAfterClaiming);
+        uint256 compBalanceAfterClaiming = compToken.balanceOf(owner);
+        assertGt(compBalanceAfterClaiming, compBalanceBeforeClaiming);
     }
 
     function test_sendBaseAssetBalance() public {
