@@ -80,7 +80,6 @@ contract Paytr is Ownable, Pausable, ReentrancyGuard {
        baseAsset = IComet(cometAddress).baseToken();
        wrapperAddress = _wrapperAddress;
        IComet(cometAddress).allow(wrapperAddress, true);
-       IERC20(baseAsset).forceApprove(cometAddress, type(uint256).max);
     }
 
     event PaymentERC20Event(address tokenAddress, address payee, address feeAddress, uint256 amount, uint40 dueDate, uint256 feeAmount, bytes paymentReference);
@@ -88,6 +87,7 @@ contract Paytr is Ownable, Pausable, ReentrancyGuard {
     event InterestPayoutEvent(address tokenAddress, address payee, uint256 interestAmount, bytes paymentReference);
     event ContractParametersUpdatedEvent(uint16 contractFeeModifier, uint256 minDueDateParameter, uint256 maxDueDateParameter, uint256 minTotalAmount, uint8 maxPayoutArraySize);
     event SetERC20FeeProxyEvent(address ERC20FeeProxyAddress);
+    event ClaimCompRewardsEvent();
 
     /// @notice paymentMapping keeps track of all the payments.
     mapping(bytes => PaymentERC20) public paymentMapping;
@@ -132,6 +132,7 @@ contract Paytr is Ownable, Pausable, ReentrancyGuard {
             IERC20(baseAsset).safeTransferFrom(msg.sender, address(this), totalAmount);
             
             uint256 cUsdcbalanceBeforeSupply = getContractCometBalance();
+            IERC20(baseAsset).forceApprove(cometAddress, totalAmount);
             IComet(cometAddress).supply(baseAsset, totalAmount);
             uint256 cUsdcbalanceAfterSupply = getContractCometBalance();
             uint256 cUsdcAmountToWrap = cUsdcbalanceAfterSupply - cUsdcbalanceBeforeSupply;         
@@ -298,6 +299,7 @@ contract Paytr is Ownable, Pausable, ReentrancyGuard {
     
     function claimCompRewards() external onlyOwner {
         IWrapper(wrapperAddress).claimTo(owner());
+        emit ClaimCompRewardsEvent();
     }
 
     function claimBaseAssetBalance() external onlyOwner {
