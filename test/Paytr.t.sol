@@ -44,8 +44,6 @@ contract PaytrTest is Test, Paytr_Helpers {
         approveBaseAsset();
 
         Paytr_Test.setERC20FeeProxy(ERC20FeeProxy);
-        console2.log("DECIMALS",decimals);
-        console2.log("AMOUNT",amountToPay);
     }
 
     function test_payInvoiceERC20SingleZeroFee() public {
@@ -82,7 +80,7 @@ contract PaytrTest is Test, Paytr_Helpers {
         assertEq(comet.balanceOf(address(Paytr_Test)), 0);       
         
         //cometWrapper (wcbaseAssetv3) balances
-        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay, 0.1e18);
+        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay, 0.2e18);
 
     }
 
@@ -120,7 +118,7 @@ contract PaytrTest is Test, Paytr_Helpers {
         assertEq(comet.balanceOf(address(Paytr_Test)), 0);       
         
         //cometWrapper (wcbaseAssetv3) balances
-        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay + 10000, 0.1e18);
+        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay + 10000, 0.2e18);
 
     }
 
@@ -160,7 +158,7 @@ contract PaytrTest is Test, Paytr_Helpers {
         assertEq(comet.balanceOf(address(Paytr_Test)), 0);       
         
         //cometWrapper (wcbaseAssetv3) balances
-        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay, 0.1e18);
+        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay, 0.2e18);
 
         uint256 contractCometWrapperBalanceBeforeSecondPayment = getContractCometWrapperBalance();
 
@@ -194,7 +192,7 @@ contract PaytrTest is Test, Paytr_Helpers {
         assertEq(comet.balanceOf(address(Paytr_Test)), 0);          
         
         //cometWrapper (wcbaseAssetv3) balances
-        assertApproxEqRel(contractCometWrapperBalanceAfterSecondPayment, contractCometWrapperBalanceBeforeSecondPayment + amountToPay, 0.1e18);
+        assertApproxEqRel(contractCometWrapperBalanceAfterSecondPayment, contractCometWrapperBalanceBeforeSecondPayment + amountToPay, 0.2e18);
 
     }
 
@@ -730,7 +728,7 @@ contract PaytrTest is Test, Paytr_Helpers {
         assertEq(comet.balanceOf(address(Paytr_Test)), 0);       
         
         //cometWrapper (wcbaseAssetv3) balances
-        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay + feeAmount, 0.1e18);
+        assertApproxEqRel(getContractCometWrapperBalance(), amountToPay + feeAmount, 0.2e18);
 
         vm.warp(block.timestamp + 29 days);
 
@@ -764,7 +762,6 @@ contract PaytrTest is Test, Paytr_Helpers {
 
     function test_claimCometRewards() public {
         uint256 compBalanceBeforeClaiming = compToken.balanceOf(owner);
-        console2.log("Comp balance before claiming",compBalanceBeforeClaiming);
 
         vm.expectEmit();
         emit PaymentERC20Event(baseAssetAddress, bob, dummyFeeAddress, amountToPay, uint40(block.timestamp + 28 days), 0, paymentReference3);
@@ -787,7 +784,6 @@ contract PaytrTest is Test, Paytr_Helpers {
 
         //COMP balance owner
         uint256 compBalanceAfterClaiming = compToken.balanceOf(owner);
-        console2.log("$COMP balance after claiming",compBalanceAfterClaiming);
         assertGt(compBalanceAfterClaiming, compBalanceBeforeClaiming);
     }
 

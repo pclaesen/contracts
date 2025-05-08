@@ -1,1 +1,1 @@
-testRevertIf_ClaimCompRewardsNotOwner
+test_payInvoiceERC20SingleWithFee|test_payInvoiceERC20SingleZeroFee|test_paymentThroughRequestNetwork
